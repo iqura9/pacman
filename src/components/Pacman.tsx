@@ -1,7 +1,6 @@
-import React from 'react';
 import styled from 'styled-components';
 
-const PacmanStyled = styled.div<{ direction: string }>`
+const PacmanStyled = styled.div<{ direction: string | null }>`
   width: 30px;
   height: 30px;
   border-radius: 50%;
@@ -17,11 +16,9 @@ const PacmanStyled = styled.div<{ direction: string }>`
 `;
 
 interface PacmanProps {
-  direction: string;
+  direction: string | null;
 }
 
-const Pacman: React.FC<PacmanProps> = ({ direction }) => {
+export default function Pacman({ direction }: PacmanProps) {
   return <PacmanStyled direction={direction} />;
-};
-
-export default Pacman;
+}

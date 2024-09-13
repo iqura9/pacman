@@ -1,29 +1,8 @@
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import styled from 'styled-components';
-import Pacman from './Pacman';
-
-const board = [
-  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-  [1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1],
-  [1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1],
-  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  [1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1],
-  [1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1],
-  [1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1],
-  [1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1],
-  [1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1],
-  [1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1],
-  [1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1],
-  [1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1],
-  [1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1],
-  [1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1],
-  [1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1],
-  [1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1],
-  [1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1],
-  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-];
+import { board, canMoveTo } from '../utils';
+import { Board } from './Board';
 
 const GameBoard = styled.div`
   display: flex;
@@ -37,23 +16,12 @@ const GameBoard = styled.div`
   }
 `;
 
-const Row = styled.div`
-  display: flex;
-`;
-
-const Cell = styled.div<{ isWall: boolean }>`
-  width: 50px;
-  height: 50px;
-  background-color: ${(props) => (props.isWall ? 'blue' : 'black')};
-  border: 1px solid white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
+export type Move = 'UP' | 'DOWN' | 'LEFT' | 'RIGHT' | null;
 
 export const Play = () => {
+  const [direction, setDirection] = useState<Move>(null);
+
   const [pacmanPos, setPacmanPos] = useState({ row: 1, col: 1 });
-  const [direction, setDirection] = useState('RIGHT');
 
   const inputDiv = useRef<HTMLInputElement | null>(null);
 
@@ -65,70 +33,88 @@ export const Play = () => {
     inputDiv.current?.blur();
   };
 
-  const canMoveTo = (row: number, col: number) => {
-    return board[row][col] === 0;
-  };
+  const movePacman = useCallback(() => {
+    if (!direction) return;
+
+    setPacmanPos((prevPos) => {
+      let newRow = prevPos.row;
+      let newCol = prevPos.col;
+
+      switch (direction) {
+        case 'UP':
+          if (newRow > 0 && canMoveTo(newRow - 1, newCol)) {
+            newRow--;
+          }
+          break;
+        case 'DOWN':
+          if (newRow < board.length - 1 && canMoveTo(newRow + 1, newCol)) {
+            newRow++;
+          }
+          break;
+        case 'LEFT':
+          if (newCol > 0 && canMoveTo(newRow, newCol - 1)) {
+            newCol--;
+          }
+          break;
+        case 'RIGHT':
+          if (newCol < board[0].length - 1 && canMoveTo(newRow, newCol + 1)) {
+            newCol++;
+          }
+          break;
+        default:
+          break;
+      }
+
+      if (prevPos.row === newRow && prevPos.col === newCol) setDirection(null);
+
+      return { row: newRow, col: newCol };
+    });
+  }, [direction]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    console.log(e);
-    let newRow = pacmanPos.row;
-    let newCol = pacmanPos.col;
+    let newDirection: Move = null;
 
     switch (e.key) {
       case 'ArrowUp':
-        if (newRow > 0 && canMoveTo(newRow - 1, newCol)) {
-          newRow--;
-          setDirection('UP');
-        }
+        newDirection = 'UP';
         break;
       case 'ArrowDown':
-        if (newRow < board.length - 1 && canMoveTo(newRow + 1, newCol)) {
-          newRow++;
-          setDirection('DOWN');
-        }
+        newDirection = 'DOWN';
         break;
       case 'ArrowLeft':
-        if (newCol > 0 && canMoveTo(newRow, newCol - 1)) {
-          newCol--;
-          setDirection('LEFT');
-        }
+        newDirection = 'LEFT';
         break;
       case 'ArrowRight':
-        if (newCol < board[0].length - 1 && canMoveTo(newRow, newCol + 1)) {
-          newCol++;
-          setDirection('RIGHT');
-        }
+        newDirection = 'RIGHT';
         break;
       default:
         break;
     }
 
-    setPacmanPos({ row: newRow, col: newCol });
+    if (newDirection && newDirection !== direction) {
+      setDirection(newDirection);
+    }
   };
 
-  const renderBoard = () => {
-    return board.map((row, rowIndex) => (
-      <Row key={rowIndex}>
-        {row.map((cell, colIndex) => (
-          <Cell key={colIndex} isWall={cell === 1}>
-            {pacmanPos.row === rowIndex && pacmanPos.col === colIndex ? (
-              <Pacman direction={direction} />
-            ) : null}
-          </Cell>
-        ))}
-      </Row>
-    ));
-  };
+  useEffect(() => {
+    const interval = setInterval(movePacman, 100);
+
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [direction, movePacman]);
 
   return (
     <GameBoard
       ref={inputDiv}
-      tabIndex={-1}
+      tabIndex={0}
       onKeyDown={handleKeyDown}
       onMouseEnter={mouseEnter}
       onMouseLeave={mouseLeave}
     >
-      {renderBoard()}
+      <Board board={board} pacmanPos={pacmanPos} direction={direction} />
     </GameBoard>
   );
 };
