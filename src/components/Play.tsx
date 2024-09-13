@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import styled from 'styled-components';
+import { useRedGhost } from '../hooks/useRedGhost';
 import { board, canMoveTo } from '../utils';
 import { Board } from './Board';
 
@@ -15,13 +16,18 @@ const GameBoard = styled.div`
     outline: none;
   }
 `;
-
+export type Coords = {
+  row: number;
+  col: number;
+};
 export type Move = 'UP' | 'DOWN' | 'LEFT' | 'RIGHT' | null;
 
 export const Play = () => {
   const [direction, setDirection] = useState<Move>(null);
 
   const [pacmanPos, setPacmanPos] = useState({ row: 1, col: 1 });
+
+  const redGhostCoords = useRedGhost(pacmanPos);
 
   const inputDiv = useRef<HTMLInputElement | null>(null);
 
@@ -114,7 +120,12 @@ export const Play = () => {
       onMouseEnter={mouseEnter}
       onMouseLeave={mouseLeave}
     >
-      <Board board={board} pacmanPos={pacmanPos} direction={direction} />
+      <Board
+        board={board}
+        pacmanPos={pacmanPos}
+        direction={direction}
+        redGhostPos={redGhostCoords}
+      />
     </GameBoard>
   );
 };

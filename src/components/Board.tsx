@@ -1,6 +1,8 @@
 import { styled } from 'styled-components';
 import Pacman from './Pacman';
-import { Move } from './Play';
+
+import { Coords, Move } from './Play';
+import RedGhost from './RedGoast';
 
 const Row = styled.div`
   display: flex;
@@ -18,14 +20,17 @@ const Cell = styled.div<{ isWall: boolean }>`
 
 type BoardProps = {
   board: number[][];
-  pacmanPos: {
-    row: number;
-    col: number;
-  };
+  pacmanPos: Coords;
   direction: Move;
+  redGhostPos: Coords;
 };
 
-export function Board({ board, pacmanPos, direction }: BoardProps) {
+export function Board({
+  board,
+  pacmanPos,
+  direction,
+  redGhostPos,
+}: BoardProps) {
   return (
     <>
       {board.map((row, rowIndex) => (
@@ -34,6 +39,10 @@ export function Board({ board, pacmanPos, direction }: BoardProps) {
             <Cell key={colIndex} isWall={cell === 1}>
               {pacmanPos.row === rowIndex && pacmanPos.col === colIndex ? (
                 <Pacman direction={direction} />
+              ) : null}
+
+              {redGhostPos.row === rowIndex && redGhostPos.col === colIndex ? (
+                <RedGhost />
               ) : null}
             </Cell>
           ))}
