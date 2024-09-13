@@ -6,3 +6,9 @@
 div:focus {
   outline: none;
 }
+
+body{
+  background-color: black;
+  height:100vh;
+  overflow: hidden;
+}
