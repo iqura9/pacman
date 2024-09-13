@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 
 import styled from "styled-components";
 import Pacman from "./Pacman";
@@ -55,7 +55,7 @@ export const Play = () => {
   const [pacmanPos, setPacmanPos] = useState({ row: 1, col: 1 });
   const [direction, setDirection] = useState("RIGHT");
 
-  const inputDiv = useRef<HTMLInputElement>();
+  const inputDiv = useRef<HTMLInputElement | null>(null);
 
   const mouseEnter = () => {
     inputDiv.current?.focus();
