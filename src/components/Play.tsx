@@ -1,7 +1,7 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState } from 'react';
 
-import styled from "styled-components";
-import Pacman from "./Pacman";
+import styled from 'styled-components';
+import Pacman from './Pacman';
 
 const board = [
   [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -44,7 +44,7 @@ const Row = styled.div`
 const Cell = styled.div<{ isWall: boolean }>`
   width: 50px;
   height: 50px;
-  background-color: ${(props) => (props.isWall ? "blue" : "black")};
+  background-color: ${(props) => (props.isWall ? 'blue' : 'black')};
   border: 1px solid white;
   display: flex;
   justify-content: center;
@@ -53,7 +53,7 @@ const Cell = styled.div<{ isWall: boolean }>`
 
 export const Play = () => {
   const [pacmanPos, setPacmanPos] = useState({ row: 1, col: 1 });
-  const [direction, setDirection] = useState("RIGHT");
+  const [direction, setDirection] = useState('RIGHT');
 
   const inputDiv = useRef<HTMLInputElement | null>(null);
 
@@ -75,28 +75,28 @@ export const Play = () => {
     let newCol = pacmanPos.col;
 
     switch (e.key) {
-      case "ArrowUp":
+      case 'ArrowUp':
         if (newRow > 0 && canMoveTo(newRow - 1, newCol)) {
           newRow--;
-          setDirection("UP");
+          setDirection('UP');
         }
         break;
-      case "ArrowDown":
+      case 'ArrowDown':
         if (newRow < board.length - 1 && canMoveTo(newRow + 1, newCol)) {
           newRow++;
-          setDirection("DOWN");
+          setDirection('DOWN');
         }
         break;
-      case "ArrowLeft":
+      case 'ArrowLeft':
         if (newCol > 0 && canMoveTo(newRow, newCol - 1)) {
           newCol--;
-          setDirection("LEFT");
+          setDirection('LEFT');
         }
         break;
-      case "ArrowRight":
+      case 'ArrowRight':
         if (newCol < board[0].length - 1 && canMoveTo(newRow, newCol + 1)) {
           newCol++;
-          setDirection("RIGHT");
+          setDirection('RIGHT');
         }
         break;
       default:

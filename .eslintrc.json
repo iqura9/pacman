@@ -1,0 +1,264 @@
+
+"env": {
+    "browser": true,
+    "es6": true,
+    "node": true
+  },
+  "overrides": [
+    {
+      "files": ["*.ts"],
+      extends: [
+        "plugin:@angular-eslint/recommended", // Rules specific to angular
+        "eslint:recommended", // The set of rules which are recommended for all projects by the ESLint Team
+        "plugin:@typescript-eslint/eslint-recommended", // As noted in the root README, not all ESLint core rules are compatible with TypeScript, so you need to add both eslint:recommended and plugin:@typescript-eslint/eslint-recommended (which will adjust the one from ESLint appropriately for TypeScript) to your config
+        "plugin:@typescript-eslint/recommended" // Uses the recommended rules from the @typescript-eslint/eslint-plugin
+      ],
+      "parser": "@typescript-eslint/parser",
+      "parserOptions": {
+        "ecmaVersion": 2020, // Allows for the parsing of modern ECMAScript features
+        "project": "./tsconfig.json",
+        "sourceType": "module"
+      },
+      "plugins": [
+        "import",
+        "@angular-eslint",
+        "@typescript-eslint"
+      ],
+      "rules": {
+        "@angular-eslint/component-class-suffix": "error",
+        "@angular-eslint/contextual-lifecycle": "error",
+        "@angular-eslint/directive-class-suffix": "error",
+        "@angular-eslint/no-host-metadata-property": "error",
+        "@angular-eslint/no-input-rename": "error",
+        "@angular-eslint/no-inputs-metadata-property": "error",
+        "@angular-eslint/no-output-on-prefix": "error",
+        "@angular-eslint/no-output-rename": "error",
+        "@angular-eslint/no-outputs-metadata-property": "error",
+        "@angular-eslint/use-component-view-encapsulation": "error",
+        "@angular-eslint/use-lifecycle-interface": "error",
+        "@angular-eslint/use-pipe-decorator": "error",
+        "@angular-eslint/use-pipe-transform-interface": "error",
+        "@typescript-eslint/naming-convention": [
+          "error",
+          {
+            "selector": "variableLike", // matches the same as `variable`, `function` and `parameter`
+            "format": [], // required, even as an empty array if using custom regex
+            "custom": {
+              "regex": "(([a-z][a-z0-9]+)((d)|([A-Z0-9][a-z0-9]+))*([A-Z])?)|(^[A-Z]+(?:_[A-Z]+)*$)|([a-z])", // this checks for camelCaseVars that allow multiple humps i.e. capitals in the middle, but not consecutively, for UPPER_CASE_VARS, and also a single a-z lowercase var
+              "match": true
+            }
+          },
+          {
+            "selector": "memberLike",
+            "format": [], // required, even as an empty array if using custom regex
+            "custom": {
+              "regex": "(([a-z][a-z0-9]+)((\d)|([A-Z0-9][a-z0-9]+))*([A-Z])?)|^(\\d*|\\D*)$", // this check for a camelCaseConst that allows multiple humps i.e. capitals in the middle, but not consecutively, and also any set of numbers only (22334455) or any set of letters only (abcdef) but not alphanumeric (mixed123Like567This)
+              "match": true
+            }
+          },
+          {
+            "selector": "memberLike",
+            "modifiers": ["private"],
+            "format": [], // required, even as an empty array if using custom regex
+            "custom": {
+              "regex": "([a-z][a-z0-9]+)((\d)|([A-Z0-9][a-z0-9]+))*([A-Z])?", // this check for a camelCaseConst that allows multiple humps i.e. capitals in the middle, but not consecutively.
+              "match": true
+            },
+            "leadingUnderscore": "allow"
+          },
+          {
+            "selector": "enumMember",
+            "format": ["PascalCase"]
+          },
+          {
+            "selector": "variable",
+            "types": ["boolean"],
+            "format": [], // required, even as an empty array if using custom regex
+            "custom": {
+              "regex": "([a-z][a-z0-9]+)?((\d)|([A-Z0-9][a-z0-9]+))*([A-Z])?", // this check for a camelCaseConst that allows multiple humps i.e. capitals in the middle, but not consecutively.
+              "match": true
+            },
+            "prefix": ["is", "should", "has", "can", "did", "will"]
+          },
+          {
+            "selector": "typeParameter",
+            "format": ["PascalCase"],
+            "prefix": ["T"]
+          }, {
+            "selector": "class",
+            "format": ["PascalCase"]
+          },
+          {
+            "selector": "typeLike",
+            "format": ["PascalCase"]
+          }
+        ],
+        "@typescript-eslint/consistent-type-definitions": "error",
+        "@typescript-eslint/dot-notation": "off",
+        "@typescript-eslint/explicit-function-return-type": [
+          "error",
+          {
+            "allowExpressions": true
+          }
+        ],
+        "@typescript-eslint/explicit-member-accessibility": [
+          "off",
+          {
+            "accessibility": "explicit"
+          }
+        ],
+        "@typescript-eslint/indent": [
+          "error", 4,
+          { SwitchCase: 1 }
+        ],
+        "@typescript-eslint/member-delimiter-style": [
+          "error",
+          {
+            "multiline": {
+              "delimiter": "semi",
+              "requireLast": true
+            },
+            "singleline": {
+              "delimiter": "semi",
+              "requireLast": false
+            }
+          }
+        ],
+        "@typescript-eslint/member-ordering": "error",
+        "@typescript-eslint/no-empty-function": "off",
+        "@typescript-eslint/no-empty-interface": "error",
+        "@typescript-eslint/no-explicit-any": 0,
+        "@typescript-eslint/no-inferrable-types": "error",
+        "@typescript-eslint/no-misused-new": "error",
+        "@typescript-eslint/no-non-null-assertion": "error",
+        "@typescript-eslint/no-unused-expressions": "error",
+        "@typescript-eslint/no-use-before-define": "error",
+        "@typescript-eslint/prefer-function-type": "error",
+        "@typescript-eslint/explicit-module-boundary-types": 0,
+        "@typescript-eslint/quotes": [
+          "error",
+          "single"
+        ],
+        "@typescript-eslint/semi": [
+          "error",
+          "always"
+        ],
+        "@typescript-eslint/type-annotation-spacing": "error",
+        "@typescript-eslint/unified-signatures": "error",
+        "arrow-body-style": "error",
+        "brace-style": [
+          "error",
+          "1tbs"
+        ],
+        "camelcase": "off",
+        "constructor-super": "error",
+        "curly": "error",
+        "eol-last": "error",
+        "eqeqeq": [
+          "error",
+          "smart"
+        ],
+        "guard-for-in": "error",
+        "id-blacklist": "off",
+        "id-match": "off",
+        "import/no-deprecated": "warn",
+        "key-spacing": [
+          "error",
+          {
+            'singleLine': {
+              'beforeColon': false,
+              'afterColon': true
+            },
+            "align": {
+              "beforeColon": false,
+              "afterColon": true,
+              "on": "value"
+            }
+          }],
+        "lines-between-class-members": ["error", "always", { exceptAfterSingleLine: true }],
+        "max-classes-per-file": [
+          "error",
+          2
+        ],
+        "max-len": [
+          "error",
+          {
+            "ignoreComments": true,
+            "ignoreUrls": true,
+            "ignoreStrings": true,
+            "ignoreRegExpLiterals": true,
+            "ignoreTemplateLiterals": true,
+            "code": 180
+          }
+        ],
+        "no-bitwise": "error",
+        "no-caller": "error",
+        "no-console": process.env.NODE_ENV === "production" ? ["error", { allow: ["warn", "error"] }] : "off",
+    "no-debugger": process.env.NODE_ENV === "production" ? "error" : "off",
+    "no-empty": "off",
+    "no-eval": "error",
+    "no-fallthrough": "error",
+    "no-new-wrappers": "error",
+    "no-restricted-imports": [
+      "error",
+      "rxjs/Rx"
+    ],
+    "no-restricted-syntax": 0,
+    "no-shadow": [
+      "error",
+      {
+        "hoist": "all"
+      }
+    ],
+    "no-throw-literal": "error",
+    "no-trailing-spaces": "error",
+    "no-undef-init": "error",
+    "no-underscore-dangle": "off",
+    "no-unused-labels": "error",
+    "no-var": "error",
+    "padded-blocks": ["error", "never"],
+    "prefer-const": "error",
+    "radix": "error",
+    "keyword-spacing": [
+      2, {
+        "before": true,
+        "after": true,
+        "overrides": {}
+      }],
+    "spaced-comment": [
+      "error",
+      "always",
+      {
+        "markers": [
+          "/"
+        ]
+      }
+    ],
+    "@angular-eslint/directive-selector": [
+      "error",
+      {
+        "type": "attribute",
+        "prefix": "app",
+        "style": "camelCase"
+      }
+    ],
+    "@angular-eslint/component-selector": [
+      "error",
+      {
+        "type": "element",
+        "prefix": "app",
+        "style": "kebab-case"
+      }
+    ]
+    }
+  },
+    {
+      files: ["*.component.html"],
+      parser: "@angular-eslint/template-parser",
+      plugins: ["@angular-eslint/template"],
+      rules: {
+        "@angular-eslint/template/banana-in-a-box": "error",
+        "@angular-eslint/template/no-negated-async": "error"
+      }
+    }
+  ]
