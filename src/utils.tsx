@@ -20,7 +20,7 @@ export const board = [
   [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 ];
 
-export const canMoveTo = (row: number, col: number) => {
+export const isWalkable = (row: number, col: number) => {
   return (
     row >= 0 &&
     row < board.length &&

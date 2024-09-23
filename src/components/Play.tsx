@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import styled from 'styled-components';
+import { GHOST_SPEED, PLAYERS_SPEED } from '../constants';
 import { useRedGhost } from '../hooks/useRedGhost';
-import { board, canMoveTo } from '../utils';
+import { board, isWalkable } from '../utils';
 import { Board } from './Board';
 
 const GameBoard = styled.div`
@@ -27,7 +28,7 @@ export const Play = () => {
 
   const [pacmanPos, setPacmanPos] = useState({ row: 1, col: 1 });
 
-  const redGhostCoords = useRedGhost(pacmanPos);
+  const redGhostCoords = useRedGhost(pacmanPos, GHOST_SPEED);
 
   const inputDiv = useRef<HTMLInputElement | null>(null);
 
@@ -48,22 +49,22 @@ export const Play = () => {
 
       switch (direction) {
         case 'UP':
-          if (newRow > 0 && canMoveTo(newRow - 1, newCol)) {
+          if (newRow > 0 && isWalkable(newRow - 1, newCol)) {
             newRow--;
           }
           break;
         case 'DOWN':
-          if (newRow < board.length - 1 && canMoveTo(newRow + 1, newCol)) {
+          if (newRow < board.length - 1 && isWalkable(newRow + 1, newCol)) {
             newRow++;
           }
           break;
         case 'LEFT':
-          if (newCol > 0 && canMoveTo(newRow, newCol - 1)) {
+          if (newCol > 0 && isWalkable(newRow, newCol - 1)) {
             newCol--;
           }
           break;
         case 'RIGHT':
-          if (newCol < board[0].length - 1 && canMoveTo(newRow, newCol + 1)) {
+          if (newCol < board[0].length - 1 && isWalkable(newRow, newCol + 1)) {
             newCol++;
           }
           break;
@@ -103,7 +104,7 @@ export const Play = () => {
   };
 
   useEffect(() => {
-    const interval = setInterval(movePacman, 100);
+    const interval = setInterval(movePacman, PLAYERS_SPEED);
 
     return () => {
       if (interval) {
