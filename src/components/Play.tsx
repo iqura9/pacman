@@ -9,6 +9,7 @@ import React, {
 import styled from 'styled-components';
 import { getDirectionCoords } from '../bfs';
 import { GHOST_SPEED, PLAYERS_SPEED } from '../constants';
+import { useClydeGhost } from '../hooks/useClydeGhost';
 import { useInkyGhost } from '../hooks/useInkyGhost';
 import { useRedGhost } from '../hooks/useRedGhost';
 import { board, isWalkable } from '../utils';
@@ -40,7 +41,7 @@ export const Play = () => {
 
   const [pacmanPos, setPacmanPos] = useState({
     row: board[0].length - 2,
-    col: 1,
+    col: board[0].length - 2,
   });
 
   const pacmanDirection = useMemo(
@@ -57,7 +58,11 @@ export const Play = () => {
     handleStopGame
   );
 
-  console.log('inkyGhostCoords', inkyGhostCoords);
+  const clydeGhostCoords = useClydeGhost(
+    pacmanPos,
+    GHOST_SPEED,
+    handleStopGame
+  );
 
   const inputDiv = useRef<HTMLInputElement | null>(null);
 
@@ -158,6 +163,7 @@ export const Play = () => {
         direction={direction}
         redGhostPos={redGhostCoords}
         inkyGhostPos={inkyGhostCoords}
+        clydeGhostPos={clydeGhostCoords}
       />
     </GameBoard>
   );

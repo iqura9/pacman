@@ -4,6 +4,7 @@ import Pacman from './Pacman';
 import InkyGhost from './InkyGhost';
 import { Coords, Move } from './Play';
 import RedGhost from './RedGoast';
+import ClydeGhost from './ClydeGhost';
 
 const Row = styled.div`
   display: flex;
@@ -25,6 +26,7 @@ type BoardProps = {
   direction: Move;
   redGhostPos: Coords;
   inkyGhostPos: Coords;
+  clydeGhostPos: Coords;
 };
 
 export function Board({
@@ -33,6 +35,7 @@ export function Board({
   direction,
   redGhostPos,
   inkyGhostPos,
+  clydeGhostPos,
 }: BoardProps) {
   return (
     <>
@@ -50,6 +53,12 @@ export function Board({
               inkyGhostPos.col === colIndex ? (
                 <InkyGhost />
               ) : null}
+
+              {clydeGhostPos.row === rowIndex &&
+              clydeGhostPos.col === colIndex ? (
+                <ClydeGhost />
+              ) : null}
+
               {inkyGhostPos.row !== rowIndex &&
               inkyGhostPos.col !== colIndex &&
               redGhostPos.row !== rowIndex &&
