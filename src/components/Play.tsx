@@ -1,7 +1,15 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 
 import styled from 'styled-components';
+import { getDirectionCoords } from '../bfs';
 import { GHOST_SPEED, PLAYERS_SPEED } from '../constants';
+import { useInkyGhost } from '../hooks/useInkyGhost';
 import { useRedGhost } from '../hooks/useRedGhost';
 import { board, isWalkable } from '../utils';
 import { Board } from './Board';
@@ -30,9 +38,26 @@ export const Play = () => {
 
   const handleStopGame = useCallback(() => setIsGameEnded(true), []);
 
-  const [pacmanPos, setPacmanPos] = useState({ row: 1, col: 1 });
+  const [pacmanPos, setPacmanPos] = useState({
+    row: board[0].length - 2,
+    col: 1,
+  });
+
+  const pacmanDirection = useMemo(
+    () => getDirectionCoords(direction),
+    [direction]
+  );
 
   const redGhostCoords = useRedGhost(pacmanPos, GHOST_SPEED, handleStopGame);
+  const inkyGhostCoords = useInkyGhost(
+    pacmanPos,
+    pacmanDirection,
+    redGhostCoords,
+    GHOST_SPEED,
+    handleStopGame
+  );
+
+  console.log('inkyGhostCoords', inkyGhostCoords);
 
   const inputDiv = useRef<HTMLInputElement | null>(null);
 
@@ -132,6 +157,7 @@ export const Play = () => {
         pacmanPos={pacmanPos}
         direction={direction}
         redGhostPos={redGhostCoords}
+        inkyGhostPos={inkyGhostCoords}
       />
     </GameBoard>
   );

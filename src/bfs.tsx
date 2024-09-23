@@ -1,4 +1,4 @@
-import { Coords } from './components/Play';
+import { Coords, Move } from './components/Play';
 import { board, isWalkable } from './utils';
 
 const UP = { row: -1, col: 0 };
@@ -7,6 +7,21 @@ const LEFT = { row: 0, col: -1 };
 const RIGHT = { row: 0, col: 1 };
 
 const directions = [UP, DOWN, LEFT, RIGHT];
+
+export const getDirectionCoords = (direction: Move) => {
+  switch (direction) {
+    case 'UP':
+      return UP;
+    case 'DOWN':
+      return DOWN;
+    case 'LEFT':
+      return LEFT;
+    case 'RIGHT':
+      return RIGHT;
+    default:
+      return { row: 0, col: 0 };
+  }
+};
 
 type BFSPath = { row: number; col: number; path: Coords[] };
 

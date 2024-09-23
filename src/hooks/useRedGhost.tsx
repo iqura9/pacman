@@ -17,12 +17,15 @@ export function useRedGhost(
 
   useEffect(() => {
     lastMoveTime = performance.now();
+  }, [redGhostCoords]);
+
+  useEffect(() => {
     if (
       redGhostCoords.row === pacmanCoords.row &&
       redGhostCoords.col === pacmanCoords.col
     )
       handleStopGame();
-  }, [redGhostCoords, handleStopGame]);
+  }, [pacmanCoords, redGhostCoords, handleStopGame]);
 
   useEffect(() => {
     let animationFrameId: number;
