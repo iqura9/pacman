@@ -5,6 +5,7 @@ import { GHOST_SPEED, PLAYERS_SPEED } from '../constants';
 import { useRedGhost } from '../hooks/useRedGhost';
 import { board, isWalkable } from '../utils';
 import { Board } from './Board';
+import GameEnded from './GameEnded';
 
 const GameBoard = styled.div`
   display: flex;
@@ -25,10 +26,13 @@ export type Move = 'UP' | 'DOWN' | 'LEFT' | 'RIGHT' | null;
 
 export const Play = () => {
   const [direction, setDirection] = useState<Move>(null);
+  const [isGameEnded, setIsGameEnded] = useState<boolean>(false);
+
+  const handleStopGame = useCallback(() => setIsGameEnded(true), []);
 
   const [pacmanPos, setPacmanPos] = useState({ row: 1, col: 1 });
 
-  const redGhostCoords = useRedGhost(pacmanPos, GHOST_SPEED);
+  const redGhostCoords = useRedGhost(pacmanPos, GHOST_SPEED, handleStopGame);
 
   const inputDiv = useRef<HTMLInputElement | null>(null);
 
@@ -112,6 +116,8 @@ export const Play = () => {
       }
     };
   }, [direction, movePacman]);
+
+  if (isGameEnded) return <GameEnded />;
 
   return (
     <GameBoard
