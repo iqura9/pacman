@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { CenterContainer, PlayButton } from './components/PlayButton';
 import { Play } from './components/Play';
+import { CenterContainer, PlayButton } from './components/PlayButton';
+import { Timer } from './components/Timer';
+import { TimerProvider } from './contexts';
 
 const App: React.FC = () => {
   const [isPlay, setIsPlay] = useState(false);
@@ -8,9 +10,12 @@ const App: React.FC = () => {
   if (!isPlay) return <PlayButton onClick={() => setIsPlay(true)} />;
 
   return (
-    <CenterContainer>
-      <Play />
-    </CenterContainer>
+    <TimerProvider>
+      <Timer />
+      <CenterContainer>
+        <Play />
+      </CenterContainer>
+    </TimerProvider>
   );
 };
 

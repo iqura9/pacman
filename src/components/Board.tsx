@@ -1,10 +1,10 @@
+import React from 'react';
 import { styled } from 'styled-components';
-import Pacman from './Pacman';
-
+import ClydeGhost from './ClydeGhost';
 import InkyGhost from './InkyGhost';
+import Pacman from './Pacman';
 import { Coords, Move } from './Play';
 import RedGhost from './RedGoast';
-import ClydeGhost from './ClydeGhost';
 
 const Row = styled.div`
   display: flex;
@@ -20,22 +20,38 @@ const Cell = styled.div<{ isWall: boolean }>`
   align-items: center;
 `;
 
+export type Ghost = {
+  ghostType: 'red' | 'inky' | 'clyde';
+  coords: Coords;
+};
+
 type BoardProps = {
   board: number[][];
   pacmanPos: Coords;
   direction: Move;
-  redGhostPos: Coords;
-  inkyGhostPos: Coords;
-  clydeGhostPos: Coords;
+  ghosts: Ghost[];
+  setGhosts: React.Dispatch<React.SetStateAction<Ghost[]>>;
 };
+
+function renderGhost(ghostType: string) {
+  switch (ghostType) {
+    case 'red':
+      return <RedGhost />;
+    case 'inky':
+      return <InkyGhost />;
+    case 'clyde':
+      return <ClydeGhost />;
+    default:
+      return null;
+  }
+}
 
 export function Board({
   board,
   pacmanPos,
   direction,
-  redGhostPos,
-  inkyGhostPos,
-  clydeGhostPos,
+  ghosts,
+  setGhosts,
 }: BoardProps) {
   return (
     <>
@@ -46,29 +62,14 @@ export function Board({
               {pacmanPos.row === rowIndex && pacmanPos.col === colIndex ? (
                 <Pacman direction={direction} />
               ) : null}
-              {redGhostPos.row === rowIndex && redGhostPos.col === colIndex ? (
-                <RedGhost />
-              ) : null}
-              {inkyGhostPos.row === rowIndex &&
-              inkyGhostPos.col === colIndex ? (
-                <InkyGhost />
-              ) : null}
-
-              {clydeGhostPos.row === rowIndex &&
-              clydeGhostPos.col === colIndex ? (
-                <ClydeGhost />
-              ) : null}
-
-              {inkyGhostPos.row !== rowIndex &&
-              inkyGhostPos.col !== colIndex &&
-              redGhostPos.row !== rowIndex &&
-              redGhostPos.col !== colIndex &&
-              pacmanPos.row !== rowIndex &&
-              pacmanPos.col !== colIndex ? (
-                <span style={{ color: 'red' }}>
-                  ({rowIndex},{colIndex})
-                </span>
-              ) : null}
+              {ghosts.map((ghost, index) =>
+                ghost.coords.row === rowIndex &&
+                ghost.coords.col === colIndex ? (
+                  <React.Fragment key={index}>
+                    {renderGhost(ghost.ghostType)}
+                  </React.Fragment>
+                ) : null
+              )}
             </Cell>
           ))}
         </Row>

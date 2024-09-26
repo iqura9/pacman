@@ -5,7 +5,6 @@ import { board } from '../utils';
 
 let lastMoveTime: number;
 
-// Helper function to calculate Euclidean distance
 const getDistance = (pos1: Coords, pos2: Coords) => {
   return Math.sqrt(
     Math.pow(pos1.row - pos2.row, 2) + Math.pow(pos1.col - pos2.col, 2)
