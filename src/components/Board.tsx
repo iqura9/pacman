@@ -21,6 +21,7 @@ const Cell = styled.div<{ isWall: boolean }>`
 `;
 
 export type Ghost = {
+  id: string;
   ghostType: 'red' | 'inky' | 'clyde';
   coords: Coords;
 };
