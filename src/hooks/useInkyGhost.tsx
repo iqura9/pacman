@@ -11,11 +11,12 @@ const clamp = (value: number, min: number, max: number) => {
 export function useInkyGhost(
   pacmanCoords: Coords,
   pacmanDirection: Coords,
+  lastCoords: Coords,
   redGhostCoords: Coords,
   GHOST_SPEED: number,
   handleStopGame: () => void
 ) {
-  const [inkyCoords, setInkyCoords] = useState<Coords>({ row: 1, col: 1 });
+  const [inkyCoords, setInkyCoords] = useState<Coords>(lastCoords);
 
   useEffect(() => {
     lastMoveTime = performance.now();

@@ -1,10 +1,7 @@
-import React from 'react';
 import { styled } from 'styled-components';
-import ClydeGhost from './ClydeGhost';
-import InkyGhost from './InkyGhost';
+import { GhostNPC } from './Ghost';
 import Pacman from './Pacman';
 import { Coords, Move } from './Play';
-import RedGhost from './RedGoast';
 
 const Row = styled.div`
   display: flex;
@@ -31,28 +28,15 @@ type BoardProps = {
   pacmanPos: Coords;
   direction: Move;
   ghosts: Ghost[];
-  setGhosts: React.Dispatch<React.SetStateAction<Ghost[]>>;
+  updateGhostPosition: (id: string, newCoords: Coords) => void;
 };
-
-function renderGhost(ghostType: string) {
-  switch (ghostType) {
-    case 'red':
-      return <RedGhost />;
-    case 'inky':
-      return <InkyGhost />;
-    case 'clyde':
-      return <ClydeGhost />;
-    default:
-      return null;
-  }
-}
 
 export function Board({
   board,
   pacmanPos,
   direction,
   ghosts,
-  setGhosts,
+  updateGhostPosition,
 }: BoardProps) {
   return (
     <>
@@ -63,14 +47,21 @@ export function Board({
               {pacmanPos.row === rowIndex && pacmanPos.col === colIndex ? (
                 <Pacman direction={direction} />
               ) : null}
-              {ghosts.map((ghost, index) =>
-                ghost.coords.row === rowIndex &&
-                ghost.coords.col === colIndex ? (
-                  <React.Fragment key={index}>
-                    {renderGhost(ghost.ghostType)}
-                  </React.Fragment>
-                ) : null
-              )}
+              {ghosts.map((ghost) => {
+                const currentCoords = { row: rowIndex, col: colIndex };
+                if (
+                  currentCoords.row === ghost.coords.row &&
+                  currentCoords.col === ghost.coords.col
+                )
+                  return (
+                    <GhostNPC
+                      key={ghost.id}
+                      ghosts={ghosts}
+                      ghost={ghost}
+                      updateGhostPosition={updateGhostPosition}
+                    />
+                  );
+              })}
             </Cell>
           ))}
         </Row>

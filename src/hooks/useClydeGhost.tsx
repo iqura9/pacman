@@ -13,13 +13,11 @@ const getDistance = (pos1: Coords, pos2: Coords) => {
 
 export function useClydeGhost(
   pacmanCoords: Coords,
+  lastCoords: Coords,
   GHOST_SPEED: number,
   handleStopGame: () => void
 ) {
-  const [clydeCoords, setClydeCoords] = useState<Coords>({
-    row: board[0].length - 2,
-    col: 1,
-  });
+  const [clydeCoords, setClydeCoords] = useState<Coords>(lastCoords);
 
   const scatterTarget = { row: board[0].length, col: 1 };
 

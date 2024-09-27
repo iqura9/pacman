@@ -1,6 +1,7 @@
-import { memo } from 'react';
+import { memo, useCallback, useState } from 'react';
 
 import styled from 'styled-components';
+import { PacmanProvider } from '../contexts/pacmanContext';
 import { useGameBoard } from '../hooks/useGameBoard';
 import { useGhosts } from '../hooks/useGhosts';
 import { usePacman } from '../hooks/usePacman';
@@ -23,6 +24,7 @@ export type Coords = {
   row: number;
   col: number;
 };
+
 export type Move = 'UP' | 'DOWN' | 'LEFT' | 'RIGHT' | null;
 
 export const Play = memo(() => {
@@ -35,30 +37,36 @@ export const Play = memo(() => {
     handleKeyDown,
   } = useGameBoard();
 
+  const [isGameEnded, setIsGameEnded] = useState<boolean>(false);
+  const handleStopGame = useCallback(() => setIsGameEnded(true), []);
+
   const { pacmanPos, pacmanDirection } = usePacman(direction, setDirection);
 
-  const { ghosts, setGhosts, isGameEnded } = useGhosts({
-    pacmanPos,
-    pacmanDirection,
-  });
+  const { ghosts, updateGhostPosition } = useGhosts();
 
   if (isGameEnded) return <GameEnded />;
 
   return (
-    <GameBoard
-      ref={inputDiv}
-      tabIndex={0}
-      onKeyDown={handleKeyDown}
-      onMouseEnter={mouseEnter}
-      onMouseLeave={mouseLeave}
+    <PacmanProvider
+      pacmanPos={pacmanPos}
+      pacmanDirection={pacmanDirection}
+      handleStopGame={handleStopGame}
     >
-      <Board
-        board={board}
-        pacmanPos={pacmanPos}
-        direction={direction}
-        ghosts={ghosts}
-        setGhosts={setGhosts}
-      />
-    </GameBoard>
+      <GameBoard
+        ref={inputDiv}
+        tabIndex={0}
+        onKeyDown={handleKeyDown}
+        onMouseEnter={mouseEnter}
+        onMouseLeave={mouseLeave}
+      >
+        <Board
+          board={board}
+          pacmanPos={pacmanPos}
+          direction={direction}
+          ghosts={ghosts}
+          updateGhostPosition={updateGhostPosition}
+        />
+      </GameBoard>
+    </PacmanProvider>
   );
 });

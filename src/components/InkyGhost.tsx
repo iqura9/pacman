@@ -1,56 +1,33 @@
-import React from 'react';
-import styled, { css } from 'styled-components';
+import { useEffect } from 'react';
+import { GHOST_SPEED } from '../constants';
 import { useTimer } from '../contexts';
+import { usePacmanData } from '../contexts/pacmanContext';
+import { useInkyGhost } from '../hooks/useInkyGhost';
+import { GhostProps } from './Ghost';
+import { GhostStyled } from './styled';
 
-interface GhostProps {
-  scatter: boolean;
-}
-
-const Ghost = styled.div<GhostProps>`
-  width: 50px;
-  height: 50px;
-  background-color: ${({ scatter }) => (scatter ? 'white' : 'blue')};
-  border-radius: 50%;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: background-color 0.3s ease;
-
-  &:before {
-    content: '';
-    width: 12px;
-    height: 12px;
-    background-color: white;
-    border-radius: 50%;
-    position: absolute;
-    top: 10px;
-    left: 15px;
-  }
-
-  &:after {
-    content: '';
-    width: 12px;
-    height: 12px;
-    background-color: white;
-    border-radius: 50%;
-    position: absolute;
-    top: 10px;
-    right: 15px;
-  }
-
-  ${({ scatter }) =>
-    scatter &&
-    css`
-      box-shadow: 0 0 15px rgba(0, 0, 255, 0.5);
-    `}
-`;
-
-const InkyGhost: React.FC = () => {
+const InkyGhost = ({ ghost, updateGhostPosition, ghosts }: GhostProps) => {
   const { mode } = useTimer();
   const isScatter = mode === 'scatter';
 
-  return <Ghost scatter={isScatter} />;
+  const { pacmanPos, handleStopGame, pacmanDirection } = usePacmanData();
+
+  const redGhost = ghosts?.find((ghost) => ghost.ghostType === 'red');
+
+  const inkyGhostCoords = useInkyGhost(
+    pacmanPos,
+    pacmanDirection,
+    ghost.coords,
+    redGhost?.coords ?? { row: 1, col: 1 },
+    GHOST_SPEED,
+    handleStopGame
+  );
+
+  useEffect(() => {
+    updateGhostPosition(ghost.id, inkyGhostCoords);
+  }, [inkyGhostCoords]);
+
+  return <GhostStyled scatter={isScatter} color="blue" />;
 };
 
 export default InkyGhost;

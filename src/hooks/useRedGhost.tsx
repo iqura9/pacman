@@ -1,19 +1,16 @@
 import { useEffect, useState } from 'react';
 import { bfs } from '../bfs';
 import { Coords } from '../components/Play';
-import { board } from '../utils';
 
 let lastMoveTime: number;
 
-export function useRedGhost(
+export const useRedGhost = (
   pacmanCoords: Coords,
+  lastCoords: Coords,
   GHOST_SPEED: number,
   handleStopGame: () => void
-) {
-  const [redGhostCoords, setRedGhostCoords] = useState<Coords>({
-    row: 1,
-    col: board[0].length - 2,
-  });
+) => {
+  const [redGhostCoords, setRedGhostCoords] = useState<Coords>(lastCoords);
 
   useEffect(() => {
     lastMoveTime = performance.now();
@@ -37,6 +34,7 @@ export function useRedGhost(
         if (currentTime - lastMoveTime >= GHOST_SPEED) {
           const path = bfs(prevCoords, pacmanCoords);
           lastMoveTime = currentTime;
+
           if (path.length > 0) {
             return path[0];
           }
@@ -56,4 +54,4 @@ export function useRedGhost(
   }, [pacmanCoords, GHOST_SPEED]);
 
   return redGhostCoords;
-}
+};
