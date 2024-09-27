@@ -44,9 +44,13 @@ export const Play = memo(() => {
   const { mode } = useTimer();
   const isScatter = mode === 'scatter';
 
-  const { pacmanPos, pacmanDirection } = usePacman(direction, setDirection);
+  const { pacmanPos, pacmanDirection, setPacmanPos } = usePacman(
+    direction,
+    setDirection
+  );
 
-  const { ghosts, updateGhostPosition, addGhost, removeGhost } = useGhosts();
+  const { ghosts, updateGhostPosition, addGhost, removeGhost } =
+    useGhosts(setPacmanPos);
 
   const handleStopGame = useCallback(
     (id: string) => {
@@ -54,12 +58,17 @@ export const Play = memo(() => {
         removeGhost(id);
       } else {
         setIsGameEnded(true);
+        setPacmanPos({
+          row: board[0].length - 2,
+          col: board[0].length - 2,
+        });
       }
     },
-    [isScatter, removeGhost]
+    [isScatter, removeGhost, setPacmanPos]
   );
 
-  if (isGameEnded) return <GameEnded />;
+  if (isGameEnded)
+    return <GameEnded onRestart={() => window.location.reload()} />;
 
   return (
     <PacmanProvider
@@ -69,6 +78,7 @@ export const Play = memo(() => {
       updateGhostPosition={updateGhostPosition}
       addGhost={addGhost}
       removeGhost={removeGhost}
+      setPacmanPos={setPacmanPos}
     >
       <GameBoard
         ref={inputDiv}

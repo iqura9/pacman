@@ -3,6 +3,9 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 interface TimerContextProps {
   time: number;
   mode: string;
+  level: number;
+  setLevel: React.Dispatch<React.SetStateAction<number>>;
+  handleStopeTimer: () => void;
 }
 
 interface TimerProviderProps {
@@ -12,16 +15,21 @@ interface TimerProviderProps {
 const TimerContext = createContext<TimerContextProps | undefined>(undefined);
 
 export const TimerProvider: React.FC<TimerProviderProps> = ({ children }) => {
+  const [level, setLevel] = useState(1);
   const [time, setTime] = useState(0);
   const [mode, setMode] = useState('chase');
-
+  const [clearTimer, setClearTimer] = useState(false);
   useEffect(() => {
     const interval = setInterval(() => {
       setTime((prevTime) => prevTime + 1);
     }, 1000);
 
+    if (clearTimer) {
+      clearInterval(interval);
+    }
+
     return () => clearInterval(interval);
-  }, []);
+  }, [clearTimer]);
 
   useEffect(() => {
     if (time % 10 === 0) {
@@ -29,8 +37,14 @@ export const TimerProvider: React.FC<TimerProviderProps> = ({ children }) => {
     }
   }, [time]);
 
+  const handleStopeTimer = () => {
+    setClearTimer(true);
+  };
+
   return (
-    <TimerContext.Provider value={{ time, mode }}>
+    <TimerContext.Provider
+      value={{ time, mode, level, setLevel, handleStopeTimer }}
+    >
       {children}
     </TimerContext.Provider>
   );

@@ -14,10 +14,10 @@ const TimerWrapper = styled.div`
 `;
 
 export const Timer: React.FC = () => {
-  const { time, mode } = useTimer();
+  const { time, mode, level } = useTimer();
   return (
     <TimerWrapper>
-      Time: {time} seconds, mode: {mode}
+      Time: {time} seconds, mode: {mode}, level: {level}
     </TimerWrapper>
   );
 };

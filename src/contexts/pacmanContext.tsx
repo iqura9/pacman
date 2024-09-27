@@ -8,6 +8,12 @@ interface PacmanContextProps {
   updateGhostPosition: (id: string, newCoords: Coords) => void;
   addGhost: (type: 'red' | 'inky' | 'clyde', coords: Coords) => void;
   removeGhost: (id: string) => void;
+  setPacmanPos: React.Dispatch<
+    React.SetStateAction<{
+      row: number;
+      col: number;
+    }>
+  >;
 }
 
 type PacmanProviderProps = {
@@ -26,6 +32,7 @@ export const PacmanProvider: React.FC<PacmanProviderProps> = ({
   updateGhostPosition,
   addGhost,
   removeGhost,
+  setPacmanPos,
 }) => {
   return (
     <Provider
@@ -36,6 +43,7 @@ export const PacmanProvider: React.FC<PacmanProviderProps> = ({
         updateGhostPosition,
         addGhost,
         removeGhost,
+        setPacmanPos,
       }}
     >
       {children}
