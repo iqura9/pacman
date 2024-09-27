@@ -4,7 +4,10 @@ import { Coords } from '../components/Play';
 interface PacmanContextProps {
   pacmanPos: Coords;
   pacmanDirection: Coords;
-  handleStopGame: () => void;
+  handleStopGame: (id: string) => void;
+  updateGhostPosition: (id: string, newCoords: Coords) => void;
+  addGhost: (type: 'red' | 'inky' | 'clyde', coords: Coords) => void;
+  removeGhost: (id: string) => void;
 }
 
 type PacmanProviderProps = {
@@ -20,9 +23,21 @@ export const PacmanProvider: React.FC<PacmanProviderProps> = ({
   pacmanPos,
   pacmanDirection,
   handleStopGame,
+  updateGhostPosition,
+  addGhost,
+  removeGhost,
 }) => {
   return (
-    <Provider value={{ pacmanPos, pacmanDirection, handleStopGame }}>
+    <Provider
+      value={{
+        pacmanPos,
+        pacmanDirection,
+        handleStopGame,
+        updateGhostPosition,
+        addGhost,
+        removeGhost,
+      }}
+    >
       {children}
     </Provider>
   );

@@ -14,8 +14,9 @@ const getDistance = (pos1: Coords, pos2: Coords) => {
 export function useClydeGhost(
   pacmanCoords: Coords,
   lastCoords: Coords,
+  ghostId: string,
   GHOST_SPEED: number,
-  handleStopGame: () => void
+  handleStopGame: (id: string) => void
 ) {
   const [clydeCoords, setClydeCoords] = useState<Coords>(lastCoords);
 
@@ -30,8 +31,8 @@ export function useClydeGhost(
       clydeCoords.row === pacmanCoords.row &&
       clydeCoords.col === pacmanCoords.col
     )
-      handleStopGame();
-  }, [clydeCoords, pacmanCoords, handleStopGame]);
+      handleStopGame(ghostId);
+  }, [clydeCoords, pacmanCoords, handleStopGame, ghostId]);
 
   useEffect(() => {
     let animationFrameId: number;

@@ -6,11 +6,12 @@ import { useInkyGhost } from '../hooks/useInkyGhost';
 import { GhostProps } from './Ghost';
 import { GhostStyled } from './styled';
 
-const InkyGhost = ({ ghost, updateGhostPosition, ghosts }: GhostProps) => {
+const InkyGhost = ({ ghost, ghosts }: GhostProps) => {
   const { mode } = useTimer();
   const isScatter = mode === 'scatter';
 
-  const { pacmanPos, handleStopGame, pacmanDirection } = usePacmanData();
+  const { pacmanPos, handleStopGame, pacmanDirection, updateGhostPosition } =
+    usePacmanData();
 
   const redGhost = ghosts?.find((ghost) => ghost.ghostType === 'red');
 
@@ -18,6 +19,7 @@ const InkyGhost = ({ ghost, updateGhostPosition, ghosts }: GhostProps) => {
     pacmanPos,
     pacmanDirection,
     ghost.coords,
+    ghost.id,
     redGhost?.coords ?? { row: 1, col: 1 },
     GHOST_SPEED,
     handleStopGame

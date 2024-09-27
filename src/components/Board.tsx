@@ -28,16 +28,9 @@ type BoardProps = {
   pacmanPos: Coords;
   direction: Move;
   ghosts: Ghost[];
-  updateGhostPosition: (id: string, newCoords: Coords) => void;
 };
 
-export function Board({
-  board,
-  pacmanPos,
-  direction,
-  ghosts,
-  updateGhostPosition,
-}: BoardProps) {
+export function Board({ board, pacmanPos, direction, ghosts }: BoardProps) {
   return (
     <>
       {board.map((row, rowIndex) => (
@@ -54,12 +47,7 @@ export function Board({
                   currentCoords.col === ghost.coords.col
                 )
                   return (
-                    <GhostNPC
-                      key={ghost.id}
-                      ghosts={ghosts}
-                      ghost={ghost}
-                      updateGhostPosition={updateGhostPosition}
-                    />
+                    <GhostNPC key={ghost.id} ghosts={ghosts} ghost={ghost} />
                   );
               })}
             </Cell>

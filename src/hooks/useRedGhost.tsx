@@ -7,8 +7,9 @@ let lastMoveTime: number;
 export const useRedGhost = (
   pacmanCoords: Coords,
   lastCoords: Coords,
+  ghostId: string,
   GHOST_SPEED: number,
-  handleStopGame: () => void
+  handleStopGame: (id: string) => void
 ) => {
   const [redGhostCoords, setRedGhostCoords] = useState<Coords>(lastCoords);
 
@@ -21,7 +22,7 @@ export const useRedGhost = (
       redGhostCoords.row === pacmanCoords.row &&
       redGhostCoords.col === pacmanCoords.col
     )
-      handleStopGame();
+      handleStopGame(ghostId);
   }, [pacmanCoords, redGhostCoords, handleStopGame]);
 
   useEffect(() => {

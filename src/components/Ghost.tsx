@@ -1,33 +1,21 @@
 import { Ghost } from './Board';
 import ClydeGhost from './ClydeGhost';
 import InkyGhost from './InkyGhost';
-import { Coords } from './Play';
 import RedGhost from './RedGoast';
 
 export interface GhostProps {
   ghost: Ghost;
   ghosts?: Ghost[];
-  updateGhostPosition: (id: string, newCoords: Coords) => void;
 }
 
-export function GhostNPC({ ghost, updateGhostPosition, ghosts }: GhostProps) {
+export function GhostNPC({ ghost, ghosts }: GhostProps) {
   switch (ghost.ghostType) {
     case 'red':
-      return (
-        <RedGhost ghost={ghost} updateGhostPosition={updateGhostPosition} />
-      );
+      return <RedGhost ghost={ghost} />;
     case 'inky':
-      return (
-        <InkyGhost
-          ghost={ghost}
-          updateGhostPosition={updateGhostPosition}
-          ghosts={ghosts}
-        />
-      );
+      return <InkyGhost ghost={ghost} ghosts={ghosts} />;
     case 'clyde':
-      return (
-        <ClydeGhost ghost={ghost} updateGhostPosition={updateGhostPosition} />
-      );
+      return <ClydeGhost ghost={ghost} />;
     default:
       return null;
   }

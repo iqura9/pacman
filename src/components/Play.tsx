@@ -1,6 +1,7 @@
 import { memo, useCallback, useState } from 'react';
 
 import styled from 'styled-components';
+import { useTimer } from '../contexts';
 import { PacmanProvider } from '../contexts/pacmanContext';
 import { useGameBoard } from '../hooks/useGameBoard';
 import { useGhosts } from '../hooks/useGhosts';
@@ -20,6 +21,7 @@ const GameBoard = styled.div`
     outline: none;
   }
 `;
+
 export type Coords = {
   row: number;
   col: number;
@@ -38,11 +40,24 @@ export const Play = memo(() => {
   } = useGameBoard();
 
   const [isGameEnded, setIsGameEnded] = useState<boolean>(false);
-  const handleStopGame = useCallback(() => setIsGameEnded(true), []);
+
+  const { mode } = useTimer();
+  const isScatter = mode === 'scatter';
 
   const { pacmanPos, pacmanDirection } = usePacman(direction, setDirection);
 
-  const { ghosts, updateGhostPosition } = useGhosts();
+  const { ghosts, updateGhostPosition, addGhost, removeGhost } = useGhosts();
+
+  const handleStopGame = useCallback(
+    (id: string) => {
+      if (isScatter) {
+        removeGhost(id);
+      } else {
+        setIsGameEnded(true);
+      }
+    },
+    [isScatter, removeGhost]
+  );
 
   if (isGameEnded) return <GameEnded />;
 
@@ -51,6 +66,9 @@ export const Play = memo(() => {
       pacmanPos={pacmanPos}
       pacmanDirection={pacmanDirection}
       handleStopGame={handleStopGame}
+      updateGhostPosition={updateGhostPosition}
+      addGhost={addGhost}
+      removeGhost={removeGhost}
     >
       <GameBoard
         ref={inputDiv}
@@ -64,7 +82,6 @@ export const Play = memo(() => {
           pacmanPos={pacmanPos}
           direction={direction}
           ghosts={ghosts}
-          updateGhostPosition={updateGhostPosition}
         />
       </GameBoard>
     </PacmanProvider>

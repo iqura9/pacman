@@ -12,9 +12,10 @@ export function useInkyGhost(
   pacmanCoords: Coords,
   pacmanDirection: Coords,
   lastCoords: Coords,
+  ghostId: string,
   redGhostCoords: Coords,
   GHOST_SPEED: number,
-  handleStopGame: () => void
+  handleStopGame: (id: string) => void
 ) {
   const [inkyCoords, setInkyCoords] = useState<Coords>(lastCoords);
 
@@ -27,7 +28,7 @@ export function useInkyGhost(
       inkyCoords.row === pacmanCoords.row &&
       inkyCoords.col === pacmanCoords.col
     )
-      handleStopGame();
+      handleStopGame(ghostId);
   }, [inkyCoords, pacmanCoords, handleStopGame]);
 
   useEffect(() => {

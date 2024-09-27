@@ -6,15 +6,16 @@ import { useRedGhost } from '../hooks/useRedGhost';
 import { GhostProps } from './Ghost';
 import { GhostStyled } from './styled';
 
-const RedGhost = ({ ghost, updateGhostPosition }: GhostProps) => {
+const RedGhost = ({ ghost }: GhostProps) => {
   const { mode } = useTimer();
   const isScatter = mode === 'scatter';
 
-  const { pacmanPos, handleStopGame } = usePacmanData();
+  const { pacmanPos, handleStopGame, updateGhostPosition } = usePacmanData();
 
   const redGhostCoords = useRedGhost(
     pacmanPos,
     ghost.coords,
+    ghost.id,
     GHOST_SPEED,
     handleStopGame
   );
