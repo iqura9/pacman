@@ -8,6 +8,13 @@ const clamp = (value: number, min: number, max: number) => {
   return Math.max(min, Math.min(max, value));
 };
 
+const getRandomIntegerInclusive = (min: number, max: number) => {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
 export function useInkyGhost(
   pacmanCoords: Coords,
   pacmanDirection: Coords,
@@ -59,7 +66,25 @@ export function useInkyGhost(
             ),
           };
 
-          const path = bfs(prevCoords, targetCoords);
+          const isSameRedRow = redGhostCoords.row === prevCoords.row;
+
+          const randomNumber = getRandomIntegerInclusive(0, 1);
+          const movementUpOrDown = randomNumber ? 1 : -1;
+
+          const newTargetCoords: Coords = {
+            row: prevCoords.row + movementUpOrDown,
+            col: prevCoords.col,
+          };
+
+          if (isSameRedRow) {
+            console.log('movementUpOrDown', movementUpOrDown);
+          }
+
+          const updatedTargetCoords = isSameRedRow
+            ? newTargetCoords
+            : targetCoords;
+
+          const path = bfs(prevCoords, updatedTargetCoords);
 
           if (path.length > 0) {
             return path[0];

@@ -8,12 +8,12 @@ const App: React.FC = () => {
   if (!isPlay) return <PlayButton onClick={() => setIsPlay(true)} />;
 
   return (
-    <>
+    <div className="">
       <Timer />
       <CenterContainer>
         <Play />
       </CenterContainer>
-    </>
+    </div>
   );
 };
 
